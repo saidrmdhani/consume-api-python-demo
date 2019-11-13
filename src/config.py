@@ -4,7 +4,7 @@ class Config:
 	
 	# Variables loaded from .env
 	env: dict = {
-		'NASA_API_KEY': ''
+		'WP_URL': ''
 	}
 
 	# Load environment variables from .env
@@ -20,8 +20,8 @@ class Config:
 			return False
 
 
-	def get_key() -> str:
-		return Config.env['NASA_API_KEY']
+	def get_url() -> str:
+		return Config.env['WP_URL']
 
 	# Initialize this class
 	def static_init() -> bool:

@@ -10,21 +10,24 @@ class API:
 
 		return Config.static_init()
 
-	# Get the astronomy image of the day
-	def get_image_of_day() -> None:
+	def download_all_media() -> None:
 
-		# Build URL
-		url: str = 'https://api.nasa.gov/planetary/apod'
-		url += '?date=' + Util.today_str() + '&hd=false'
-		url += '&api_key=' + Config.get_key()
-		
-		# Get and process data
+		page = 1
+		images = API.get_page_images(1)
+		while page <= int(images['total']):
+			images = API.get_page_images(page)
+			page = page + 1
+			API.download_page_images(images['data'])
+
+	# Get page images
+	def get_page_images(page: int) -> dict:
+
+		url: str = Config.get_url() + '/wp-json/wp/v2/media?per_page=5&page=' + str(page)
 		data = Util.get_json(url)
-		image_url: str = data['url']
-		image_filename: str = image_url.split('/')[-1]
-		json_filename: str = image_filename + '.json'
-		json_data: str = json.JSONEncoder().encode(data)
+		return data
 
-		# Download the image and write info to disk
-		Util.download_file(image_url, 'data/' + image_filename)
-		Util.write_json(json_data, 'data/' + json_filename)
+	def download_page_images(images: dict) -> None:
+
+		for image in images:
+			filename = image['title']['rendered'] + '.' + image['mime_type'].split('/')[1]
+			Util.download_file(image['source_url'], filename)

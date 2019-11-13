@@ -1,12 +1,7 @@
-import urllib.request, urllib.response
+import urllib.request, urllib.response, requests
 import datetime, json
 
 class Util:
-
-	# The current 
-	def today_str() -> str:
-
-		return str(datetime.date.today())
 
 	# Call a GET request on the URL and return a string
 	def get(url: str) -> bytes:
@@ -16,19 +11,18 @@ class Util:
 
 	# Call a GET request on the URL and return JSON data
 	def get_json(url: str) -> dict:
-
+		data: dict = { 'data': {}, 'total': 0 }
 		with urllib.request.urlopen(url) as response:
-   			return json.load(response)
+			data['data'] = json.load(response)
+		data['total'] = response.getheader('X-WP-TotalPages')
+		return data
 
 	# Download a file and save a local copy
-	def download_file(url: str, path: str) -> None:
-
-		return urllib.request.urlretrieve(url, path)
-
-	# Write data to a file on disk
-	def write_json(data: str, path: str) -> None:
-
-		out_file = open(path, 'w')
-		out_file.write(data)
-		out_file.close()
-	
+	def download_file(url: str, filename: str) -> None:
+		try:
+			print('Downloading: ' + url)
+			myfile = requests.get(url)
+			open('data/' + filename, 'wb').write(myfile.content)
+			print(filename + ' has been downloaded successfully.')
+		except:
+			print('Error while downloading ' + filename)

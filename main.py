@@ -5,9 +5,9 @@ class Example:
 	def static_init() -> None:
 		return API.static_init()
 
-	def get_todays_image() -> str:
-		return API.get_image_of_day()
+	def download_wp_media() -> None:
+		return API.download_all_media()
 
 
 Example.static_init()
-Example.get_todays_image()
+Example.download_wp_media()
