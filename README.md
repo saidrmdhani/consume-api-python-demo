@@ -1,4 +1,4 @@
-# consume-api-python-demo
+# wp-media-downloader
 This example project is a companion to [this article](https://itnext.io/consuming-web-apis-with-python-fa9b751d2c75) about how to consume open web APIs with Python
 ![](preview.png)
 
